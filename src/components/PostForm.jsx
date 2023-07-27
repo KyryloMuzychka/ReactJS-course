@@ -12,7 +12,7 @@ const PostForm = ({create}) => {
         }
         create(newPost)
         setPost({title: '', body: ''})
-        {/* console.log(bodyInputRef.current) */}
+        /* console.log(bodyInputRef.current) */
       }
 
     return (
