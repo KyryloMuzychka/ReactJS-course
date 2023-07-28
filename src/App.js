@@ -9,27 +9,22 @@ import MyButtton from './components/UI/button/MyButton';
 import { usePosts } from './hooks/usePosts';
 import PostService from './components/API/PostService';
 import Loader from './components/UI/Loader/Loader';
+import { useFetching } from './hooks/useFetching';
 
 function App() {
   const [posts, setPosts] = useState([])
   const [filter, setFilter] = useState({ sort: '', query: '' })
   const [modal, setModal] = useState(false)
   const sortedAndSearchedPosts = usePosts(posts, filter.sort, filter.query)
-  const [isPostLoading, setIsPostLoading] = useState(false)
+  const [fetchPosts, isPostLoading, postError] = useFetching(async () => {
+    const posts = await PostService.getAll()
+    setPosts(posts)
+  })
 
   useEffect(() => {
     console.log('hi')
     fetchPosts()
   }, [])
-
-  async function fetchPosts() {
-    setIsPostLoading(true)
-    setTimeout(async () => {
-      const posts = await PostService.getAll()
-      setPosts(posts)
-      setIsPostLoading(false)
-    }, 1000)
-  }
 
   const createPost = (newPost) => {
     setPosts([...posts, newPost])
@@ -55,17 +50,16 @@ function App() {
         filter={filter}
         setFilter={setFilter}
       />
+      {postError &&
+        <h1>Error: {postError}</h1>
+      }
       {isPostLoading
-
-        ? <div style={{display: 'flex', justifyContent: 'center', marginTop: 50}}>
-            <Loader/>
-          </div>
-
-          : <PostList remove={removePost} posts={sortedAndSearchedPosts} title="List of items 1" />
-    }
-        </div>
+        ? <div style={{ display: 'flex', justifyContent: 'center', marginTop: 50 }}><Loader /></div>
+        : <PostList remove={removePost} posts={sortedAndSearchedPosts} title="List of items 1" />
+      }
+    </div>
   );
 
 }
 
-      export default App;
+export default App;
