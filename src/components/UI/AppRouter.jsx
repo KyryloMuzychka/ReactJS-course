@@ -4,15 +4,25 @@ import About from "../../pages/About";
 import Posts from "../../pages/Posts";
 import NotFound from "../../pages/NotFound";
 import PostIdPages from '../../pages/PostIdPage';
+import { routes } from './router/routes';
 
 const AppRouter = () => {
     return (
         <Routes>
-          <Route path="/about" element={<About />} />
+                  {routes.map(route =>
+                    <Route 
+                        element={route.element}
+                        path={route.path}
+                        exact={route.exact}
+                    />
+                )}  
+
+           
+          {/* <Route path="/about" element={<About />} />
           <Route exact path="/" element={<Posts />} />
           <Route exact path="/posts" element={<Posts />} />
           <Route exact path="/posts/:id" element={<PostIdPages />} />
-          <Route path="*" element={<NotFound />}/>
+          <Route path="*" element={<NotFound />}/> */}
         </Routes>
     );
 };
